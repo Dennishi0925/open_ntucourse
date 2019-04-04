@@ -1,8 +1,43 @@
-library(tidyverse)
 library(rvest)
 library(httr)
-Sys.setenv(NLS_LANG="TRADITIONAL CHINESE_TAIWAN.UTF8")
-source("/Users/dtseng02/Documents/Initial Func(1).R")
+Sys.setenv('R_MAX_VSIZE'=32000000000)
+# Install package if not exists
+pkgs <- c('data.table', "magrittr", 'reshape2', 'lubridate', 'stringr', 'dplyr', 'tidyr',
+          'tidyverse','googlesheets','openxlsx','psych','clipr','formattable',
+          'ROracle','dbplyr','DBI')
+
+new.pkgs <- pkgs[!(pkgs %in% installed.packages())]
+if (length(new.pkgs)) {
+  install.packages(new.pkgs, repos = 'http://cran.csie.ntu.edu.tw/')
+}
+# Require packages
+##lapply : 以迴圈方式require()啟用packages
+lapply(pkgs, require, character.only = TRUE)
+
+#------------------------------------#
+#useful function
+
+transpose_df <- function(df) {
+  t_df <- data.table::transpose(df)
+  colnames(t_df) <- rownames(df)
+  rownames(t_df) <- colnames(df)
+  t_df <- t_df %>%
+    tibble::rownames_to_column(.data = .) %>%
+    tibble::as_data_frame(x = .)
+  return(t_df)
+}
+
+get_colnames <- function(df, .collapse = ", ") {
+  final <- df %>% colnames() %>% str_c(collapse = .collapse)
+  return(final)
+}
+
+#Mac本機端與Oracle內的中文問題
+#Sys.setenv(NLS_LANG="TRADITIONAL CHINESE_TAIWAN.UTF8")
+#Sys.setlocale(category = "LC_ALL", locale = "zh_TW.UTF-8")
+
+#---------------------------------------------------------#
+#開始爬蟲#
 
 ###先讀之前爬下來的index檔案
 a = read_csv("/Users/dtseng02/Documents/Dennis/ntucourse/table_page_final.csv")
