@@ -1,6 +1,5 @@
 library(rvest)
 library(httr)
-library(jsonlite)
 Sys.setenv('R_MAX_VSIZE'=32000000000)
 # Install package if not exists
 pkgs <- c('data.table', "magrittr", 'reshape2', 'lubridate', 'stringr', 'dplyr', 'tidyr',
