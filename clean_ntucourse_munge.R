@@ -286,6 +286,8 @@ table_tidy_final <- table_tidy_tmp %>%
   rename(課程_ID = ID)
 
 table_tidy_final
+table_tidy_final %>% write_rds("/Users/dtseng02/Documents/Dennis/ntucourse/raw_data/table_tidy_final.rds")
+
 
 ###結論
 #待解: 
